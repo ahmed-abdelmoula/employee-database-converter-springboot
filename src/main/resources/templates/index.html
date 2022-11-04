@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Home Page</title>
+<script type="text/javascript"
+	src="webjars/jquery/3.3.1-1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+	integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	crossorigin="anonymous"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<link rel="stylesheet"
+	href="webjars/bootstrap/4.2.1/css/bootstrap.min.css" />
+<script type="text/javascript" th:src="@{js/main.js}"
+	src="../static/js/main.js"></script>
+</head>
+<body>
+	<div class="container">
+		<button class="btn btn-success nBtn">Add</button>
+		<div class="card">
+			<div class="card-block">
+
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nom</th>
+							<th>Prenom</th>
+							<th>CIN</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="user :${data.content}">
+							<td th:text="${user.id}"></td>
+							<td th:text="${user.nom}"></td>
+							<td th:text="${user.prenom}"></td>
+							<td th:text="${user.cin}"></td>
+							<td><a th:href="@{/delete(id=${user.id})}"
+								class="btn btn-danger delBtn"><i class="fa fa-trash"
+									aria-hidden="true"></i> Delete</a> <a
+								th:href="@{/findOne(id=${user.id})}"
+								class="btn btn-primary eBtn">Edit</a> <a
+								th:href="@{/XmlOne(id=${user.id})}" class="btn btn-warning">XML</a>
+
+							</td>
+
+
+						</tr>
+
+					</tbody>
+
+				</table>
+				<!-- <a th:href="@{|/files|}" class="btn btn-info">Download</a>
+ -->
+
+						</br>
+
+				<div class="row">
+
+					<div class="col-sm-4">
+						<form th:action="@{/xmltod}">
+							<select id="select" class="custom-select">
+								<option selected id="mySelect">Open this select menu</option>
+								<option th:each="tables : ${tablesname}" th:value="${tables}"
+									th:text="${tables}"></option>
+							</select> <input id="balbaz" type="hidden" name="ch"> 
+							<input type='submit' value="Confirmer">
+
+						</form>
+
+
+					</div>
+					<div class="col-sm-8">
+						<form method="post" th:object="${formupload}"
+							th:action="@{/upload}" enctype="multipart/form-data">
+							<input type="file" name="file" /> <input type="submit"
+								class="btn btn-info" value="Upload">
+
+						</form>
+
+					</div>
+				</div>
+
+				<p th:text="${message}"></p>
+				<hr />
+				<ul class="nav nav-pills">
+					<li class="nav-item"
+						th:each="i : ${#numbers.sequence(0,data.totalPages-1)}"><a
+						th:href="@{/(page=${i})}" th:text="${i}" class="nav-link"
+						th:classappend="${currentPage}==${i}?'active':''"></a> <!-- if you want to acess a particular page you pass this page in parametre -->
+					</li>
+				</ul>
+
+
+			</div>
+
+		</div>
+
+		<div class="myForm">
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p class="alert alert-danger">Êtes-vous sûr de vouloir
+								supprimer cet utilisateur?  </p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+							<a href="" class="btn btn-danger" id="delRef">Delete</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<form th:action="@{/save}" method="post">
+
+				<div class="modal fade" id="exampleModal" tabindex="-1"
+					role="dialog" aria-labelledby="exampleModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Update or
+									Create</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<label for="id" class="col-form-label">ID:</label> <input
+										type="text" class="form-control" id="id" name="id"
+										placeholder="">
+								</div>
+								<div class="form-group">
+									<label for="nom" class="col-form-label">Nom:</label> <input
+										type="text" class="form-control" id="nom" name="nom"
+										placeholder="">
+								</div>
+								<div class="form-group">
+									<label for="id" class="col-form-label">Prenom:</label> <input
+										type="text" class="form-control" id="prenom" name="prenom"
+										placeholder="">
+								</div>
+								<div class="form-group">
+									<label for="id" class="col-form-label">CIN:</label> <input
+										type="text" class="form-control" id="cin" name="cin"
+										placeholder="">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">Close</button>
+								<input type="submit" class="btn btn-primary" value="Save">
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</form>
+		</div>
+	</div>
+
+
+
+
+	<script>
+		$('#select').on('change', function() {
+			$('#balbaz').val(this.value);
+		});
+	</script>
+</body>
+
+</html>
